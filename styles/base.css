@@ -93,3 +93,62 @@ input[type="number"] {
 section {
   margin-bottom: 24px;
 }
+
+/* ---------- FS Evo Homepage ---------- */
+
+.site-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.site-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tagline {
+  color: #555;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.tool-card {
+  display: block;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tool-card:hover {
+  border-color: #000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.tool-card h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.tool-card p {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.tool-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.site-footer {
+  margin-top: 3rem;
+  text-align: center;
+  color: #777;
+  font-size: 0.9rem;
+}
