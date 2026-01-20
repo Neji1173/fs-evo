@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coordinate Converter | FS Evo</title>
+
+  <link rel="stylesheet" href="../../styles/base.css" />
+</head>
+
+<body>
+  <header>
+    <h1>Coordinate Converter</h1>
+    <p>Convert latitude / longitude to projected coordinates.</p>
+    <p><a href="../../public/index.html">← Back to FS Evo</a></p>
+  </header>
+
+  <main>
+  <section>
+    <h2>Input Coordinates</h2>
+
+    <p>Enter latitude and longitude in decimal degrees.</p>
+    
+    <div>
+      <label for="projection">Projection</label><br />
+      <select id="projection">
+        <option value="mercator">Web Mercator (EPSG:3857)</option>
+        <option value="utm">UTM (WGS84)</option>
+       </select>
+    </div>
+    
+    <br />
+
+    <div>
+      <label for="lat">
+        Latitude (−90 to 90)
+      </label><br />
+      <input
+        id="lat"
+        type="number"
+        step="any"
+        placeholder="e.g. 12.9716"
+      />
+    </div>
+
+    <br />
+
+    <div>
+      <label for="lng">Longitude (−180 to 180)</label><br />
+      <input
+        id="lng"
+        type="number"
+        step="any"
+        placeholder="e.g. 77.5946"
+      />
+      <p id="error-message" style="color: #b91c1c; margin-top: 8px;"></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Output</h2>
+    <p id="output-note">
+      Projection result shown in meters.
+    </p>
+
+    <div>
+      <label id="output-x-label">X / Easting:</label>
+      <p id="output-x">—</p>
+    </div>
+
+    <div>
+      <label id="output-y-label">Y / Northing:</label>
+      <p id="output-y">—</p>
+    </div>
+  </section>
+  </main>
+
+  <footer>
+    <p>FS Evo — Coordinate Utility</p>
+  </footer>
+
+  <script src="logic.js"></script>
+</body>
+</html>

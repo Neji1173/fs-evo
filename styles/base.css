@@ -1,0 +1,95 @@
+/* FS Evo - Base Styles */
+/* Purpose: clean defaults, no visual polish yet */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, sans-serif;
+  line-height: 1.6;
+  color: #111827;
+  background-color: #f9fafb;
+  padding: 24px;
+}
+
+header,
+main,
+footer {
+  max-width: 960px;
+  margin: 0 auto 24px auto;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+}
+
+p {
+  margin-bottom: 8px;
+}
+
+ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.tool-card {
+  border: 1px solid #e5e7eb;
+  padding: 16px;
+  border-radius: 6px;
+  background-color: #ffffff;
+}
+
+.tool-card h3 {
+  margin-bottom: 8px;
+}
+
+.tool-card p {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.tool-card a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #2563eb;
+}
+
+label {
+  font-weight: 500;
+}
+
+input[type="number"] {
+  width: 100%;
+  max-width: 320px;
+  padding: 6px 8px;
+  margin-top: 4px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+#output-note {
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+section {
+  margin-bottom: 24px;
+}
