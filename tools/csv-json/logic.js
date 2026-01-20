@@ -1,7 +1,9 @@
 // FS Evo — CSV ↔ JSON Converter
-// Step 17 complete: buttons + conversion logic
+// Version: v1 (stable)
+// Features: CSV→JSON, JSON→CSV, copy, download
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Elements
   const input = document.getElementById("inputData");
   const output = document.getElementById("outputData");
 
@@ -21,12 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
     !jsonToCsvRadio ||
     !convertBtn ||
     !clearBtn ||
-    !copyBtn
+    !copyBtn ||
+    !downloadBtn
   ) {
     console.error("FS Evo: Required elements not found");
     return;
   }
 
+  // ---------- CSV → JSON ----------
   function csvToJson(csvText) {
     const lines = csvText.trim().split("\n");
     if (lines.length < 2) return [];
@@ -36,13 +40,41 @@ document.addEventListener("DOMContentLoaded", () => {
     return lines.slice(1).map(line => {
       const values = line.split(",");
       const obj = {};
+
       headers.forEach((h, i) => {
         obj[h] = (values[i] || "").trim();
       });
+
       return obj;
     });
   }
 
+  // ---------- JSON → CSV ----------
+  function jsonToCsv(jsonText) {
+    const data = JSON.parse(jsonText);
+
+    if (!Array.isArray(data) || data.length === 0) {
+      return "";
+    }
+
+    const headers = Object.keys(data[0]);
+    const rows = [];
+
+    // Header row
+    rows.push(headers.join(","));
+
+    // Data rows
+    data.forEach(item => {
+      const values = headers.map(h =>
+        item[h] !== undefined ? String(item[h]).replace(/,/g, "") : ""
+      );
+      rows.push(values.join(","));
+    });
+
+    return rows.join("\n");
+  }
+
+  // ---------- Convert ----------
   function convertData() {
     const value = input.value.trim();
     if (!value) {
@@ -55,15 +87,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const json = csvToJson(value);
         output.value = JSON.stringify(json, null, 2);
       } else {
-        output.value = "JSON → CSV will be added next.";
+        const csv = jsonToCsv(value);
+        output.value = csv;
       }
     } catch (err) {
       output.value = "Error: Invalid input format.";
     }
   }
 
-  convertBtn.addEventListener("click", convertData);
-  
+  // ---------- Download ----------
   function downloadOutput() {
     if (!output.value) return;
 
@@ -86,6 +118,9 @@ document.addEventListener("DOMContentLoaded", () => {
     URL.revokeObjectURL(url);
   }
 
+  // ---------- Events ----------
+  convertBtn.addEventListener("click", convertData);
+
   clearBtn.addEventListener("click", () => {
     input.value = "";
     output.value = "";
@@ -99,6 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
       copyBtn.textContent = "Copy Output";
     }, 1000);
   });
-});
 
- downloadBtn.addEventListener("click", downloadOutput);
+  downloadBtn.addEventListener("click", downloadOutput);
+});
