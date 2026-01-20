@@ -1,5 +1,9 @@
 // FS Evo — Coordinate Converter
-// Step 25: WGS84 ↔ Web Mercator ↔ UTM (Complete)
+// Version: v1 (stable)
+// Features:
+// - WGS84 ↔ Web Mercator (EPSG:4326 ↔ 3857)
+// - WGS84 ↔ UTM (forward & reverse)
+// - Copy & Download output
 
 document.addEventListener("DOMContentLoaded", () => {
   const latInput = document.getElementById("lat");
