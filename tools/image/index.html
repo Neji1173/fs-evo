@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Utility | FS Evo</title>
+  <link rel="stylesheet" href="../../styles/base.css" />
+</head>
+
+<body>
+  <header class="tool-header">
+    <a class="back-link" href="../../public/index.html">← Back to FS Evo</a>
+    <h1>Image Utility</h1>
+    <p class="tool-desc">
+      Resize images and convert formats directly in your browser.
+    </p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Input Image</h2>
+      <input type="file" id="imageInput" accept="image/*" />
+    </section>
+
+    <section>
+      <h2>Resize</h2>
+      <label>
+        Width (px)
+        <input type="number" id="widthInput" placeholder="Auto scale height" />
+      </label>
+    </section>
+
+    <section>
+      <h2>Output Format</h2>
+      <select id="formatSelect">
+        <option value="image/png">PNG</option>
+        <option value="image/jpeg">JPG</option>
+        <option value="image/webp">WEBP</option>
+      </select>
+
+      <div class="button-row">
+        <button id="convertBtn">Convert</button>
+        <button id="clearBtn">Clear</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Output</h2>
+      <canvas id="canvas"></canvas>
+
+      <div class="tool-actions">
+        <button id="downloadBtn">Download Image</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>FS Evo — Image Utility (v1)</p>
+  </footer>
+
+  <script src="logic.js"></script>
+</body>
+</html>
