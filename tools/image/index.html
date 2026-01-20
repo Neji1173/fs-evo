@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Image Utility | FS Evo</title>
+
   <link rel="stylesheet" href="../../styles/base.css" />
 </head>
 
 <body>
+  <!-- ===== Tool Header ===== -->
   <header class="tool-header">
     <a class="back-link" href="../../public/index.html">← Back to FS Evo</a>
     <h1>Image Utility</h1>
@@ -16,48 +19,71 @@
     </p>
   </header>
 
+  <!-- ===== Tool Main ===== -->
   <main>
-    <section>
-      <h2>Input Image</h2>
-      <input type="file" id="imageInput" accept="image/*" />
-    </section>
+    <form id="imageForm" autocomplete="off">
+      <!-- Input Image -->
+      <section>
+        <h2>Input Image</h2>
+        <input type="file" id="imageInput" accept="image/*" />
+      </section>
 
-    <section>
-      <h2>Resize</h2>
-      <label>
-        Width (px)
-        <input type="number" id="widthInput" placeholder="Auto scale height" />
-      </label>
-    </section>
+      <!-- Resize -->
+      <section>
+        <h2>Resize</h2>
 
-    <section>
-      <h2>Output Format</h2>
-      <select id="formatSelect">
-        <option value="image/png">PNG</option>
-        <option value="image/jpeg">JPG</option>
-        <option value="image/webp">WEBP</option>
-      </select>
+        <label for="widthInput">
+          Width (px)
+        </label>
+        <input
+          type="number"
+          id="widthInput"
+          placeholder="Leave empty to keep original width"
+        />
 
-      <div class="button-row">
-        <button id="convertBtn">Convert</button>
-        <button id="clearBtn">Clear</button>
-      </div>
-    </section>
+        <p class="tool-desc">
+          Height will be scaled automatically to preserve aspect ratio.
+        </p>
+      </section>
 
-    <section>
-      <h2>Output</h2>
-      <canvas id="canvas"></canvas>
+      <!-- Output Format -->
+      <section>
+        <h2>Output Format</h2>
 
-      <div class="tool-actions">
-        <button id="downloadBtn">Download Image</button>
-      </div>
-    </section>
+        <label for="formatSelect">
+          Format
+        </label>
+        <select id="formatSelect">
+          <option value="image/png">PNG</option>
+          <option value="image/jpeg">JPG</option>
+          <option value="image/webp">WEBP</option>
+        </select>
+
+        <div class="tool-actions">
+          <button type="button" id="convertBtn">Convert</button>
+          <button type="button" id="clearBtn">Clear</button>
+        </div>
+      </section>
+
+      <!-- Output -->
+      <section>
+        <h2>Output</h2>
+
+        <canvas id="canvas"></canvas>
+
+        <div class="tool-actions">
+          <button type="button" id="downloadBtn">Download Image</button>
+        </div>
+      </section>
+    </form>
   </main>
 
-  <footer>
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
     <p>FS Evo — Image Utility (v1)</p>
   </footer>
 
+  <!-- ===== JS ===== -->
   <script src="logic.js"></script>
 </body>
 </html>

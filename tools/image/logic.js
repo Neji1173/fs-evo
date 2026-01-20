@@ -1,5 +1,10 @@
 // FS Evo — Image Utility
-// Version: v1 (resize + format convert)
+// Version: v1.1 (resize + format convert)
+//
+// Notes:
+// - Preserves aspect ratio
+// - Uses canvas only (no external libs)
+// - Designed for quick, safe client-side use
 
 document.addEventListener("DOMContentLoaded", () => {
   const imageInput = document.getElementById("imageInput");
@@ -25,31 +30,59 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const ctx = canvas.getContext("2d");
-  let loadedImage = null;
+  if (!ctx) {
+    console.error("FS Evo: Canvas context not available");
+    return;
+  }
 
+  let loadedImage = null;
+  let objectUrl = null;
+
+  // ---------- Load Image ----------
   imageInput.addEventListener("change", () => {
     const file = imageInput.files[0];
     if (!file) return;
 
+    if (objectUrl) {
+      URL.revokeObjectURL(objectUrl);
+      objectUrl = null;
+    }
+
     const img = new Image();
+    objectUrl = URL.createObjectURL(file);
+
     img.onload = () => {
       loadedImage = img;
       drawImage();
     };
-    img.src = URL.createObjectURL(file);
+
+    img.onerror = () => {
+      loadedImage = null;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+
+    img.src = objectUrl;
   });
 
+  // ---------- Draw / Resize ----------
   function drawImage() {
-    if (!loadedImage) return;
+    if (!loadedImage) {
+      return;
+    }
 
-    const targetWidth = parseInt(widthInput.value);
+    const targetWidth = parseInt(widthInput.value, 10);
+
+    if (targetWidth !== undefined && targetWidth !== null && targetWidth <= 0) {
+      return;
+    }
+
     const scale =
       targetWidth && targetWidth > 0
         ? targetWidth / loadedImage.width
         : 1;
 
-    const w = loadedImage.width * scale;
-    const h = loadedImage.height * scale;
+    const w = Math.round(loadedImage.width * scale);
+    const h = Math.round(loadedImage.height * scale);
 
     canvas.width = w;
     canvas.height = h;
@@ -58,19 +91,36 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.drawImage(loadedImage, 0, 0, w, h);
   }
 
-  convertBtn.addEventListener("click", drawImage);
+  // ---------- Events ----------
+  convertBtn.addEventListener("click", () => {
+    if (!loadedImage) {
+      return;
+    }
+    drawImage();
+  });
 
   clearBtn.addEventListener("click", () => {
     imageInput.value = "";
     widthInput.value = "";
+
+    if (objectUrl) {
+      URL.revokeObjectURL(objectUrl);
+      objectUrl = null;
+    }
+
+    loadedImage = null;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.width = 0;
     canvas.height = 0;
-    loadedImage = null;
   });
 
   downloadBtn.addEventListener("click", () => {
-    if (!loadedImage) return;
+    if (!loadedImage || canvas.width === 0 || canvas.height === 0) {
+      return;
+    }
+
+    // Ensure latest resize is applied
+    drawImage();
 
     const mime = formatSelect.value;
     const ext = mime.split("/")[1];

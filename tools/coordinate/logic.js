@@ -1,9 +1,10 @@
 // FS Evo — Coordinate Converter
-// Version: v1 (stable)
-// Features:
+// Version: v1.1 (stable)
+// Supported:
 // - WGS84 ↔ Web Mercator (EPSG:4326 ↔ 3857)
-// - WGS84 ↔ UTM (forward & reverse)
-// - Copy & Download output
+// - WGS84 → UTM (forward only)
+// Notes:
+// - UTM → WGS84 requires zone & hemisphere (intentionally disabled)
 
 document.addEventListener("DOMContentLoaded", () => {
   const latInput = document.getElementById("lat");
@@ -22,20 +23,18 @@ document.addEventListener("DOMContentLoaded", () => {
     !lngInput ||
     !directionSelect ||
     !projectionSelect ||
-    !output ||
-    !copyBtn ||
-    !downloadBtn
+    !output
   ) {
     console.error("FS Evo: Required elements not found");
     return;
   }
 
-  // WGS84 constants
+  // ---------- Constants (WGS84) ----------
   const a = 6378137.0;
   const f = 1 / 298.257223563;
   const k0 = 0.9996;
   const e = Math.sqrt(f * (2 - f));
-  const e1sq = e * e / (1 - e * e);
+  const e1sq = (e * e) / (1 - e * e);
 
   // ---------- Web Mercator ----------
   function wgs84ToWebMercator(lat, lon) {
@@ -53,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return { lat, lon };
   }
 
-  // ---------- UTM ----------
+  // ---------- UTM (Forward Only) ----------
   function wgs84ToUTM(lat, lon) {
     const zone = Math.floor((lon + 180) / 6) + 1;
     const λ0 = ((zone - 1) * 6 - 180 + 3) * Math.PI / 180;
@@ -96,95 +95,62 @@ document.addEventListener("DOMContentLoaded", () => {
     return { easting, northing, zone, hemisphere };
   }
 
-  function utmToWgs84(easting, northing, zone, hemisphere) {
-    if (hemisphere === "S") northing -= 10000000;
-
-    const λ0 = ((zone - 1) * 6 - 180 + 3) * Math.PI / 180;
-    const M = northing / k0;
-
-    const μ =
-      M /
-      (a *
-        (1 - e ** 2 / 4 - 3 * e ** 4 / 64 - 5 * e ** 6 / 256));
-
-    const φ1 =
-      μ +
-      (3 * e / 2 - 27 * e ** 3 / 32) * Math.sin(2 * μ) +
-      (21 * e ** 2 / 16 - 55 * e ** 4 / 32) * Math.sin(4 * μ) +
-      (151 * e ** 3 / 96) * Math.sin(6 * μ);
-
-    const N1 = a / Math.sqrt(1 - e ** 2 * Math.sin(φ1) ** 2);
-    const T1 = Math.tan(φ1) ** 2;
-    const C1 = e1sq * Math.cos(φ1) ** 2;
-    const R1 =
-      (a * (1 - e ** 2)) /
-      Math.pow(1 - e ** 2 * Math.sin(φ1) ** 2, 1.5);
-
-    const D = (easting - 500000) / (N1 * k0);
-
-    const lat =
-      φ1 -
-      (N1 * Math.tan(φ1) / R1) *
-        (D ** 2 / 2 -
-          (5 + 3 * T1 + 10 * C1 - 4 * C1 ** 2 - 9 * e1sq) *
-            D ** 4 / 24);
-
-    const lon =
-      λ0 +
-      (D -
-        (1 + 2 * T1 + C1) * D ** 3 / 6 +
-        (5 - 2 * C1 + 28 * T1 - 3 * C1 ** 2 + 8 * e1sq + 24 * T1 ** 2) *
-          D ** 5 / 120) /
-        Math.cos(φ1);
-
-    return {
-      lat: lat * (180 / Math.PI),
-      lon: lon * (180 / Math.PI),
-    };
-  }
-
+  // ---------- Main Convert ----------
   function convertCoordinates() {
-    const A = parseFloat(latInput.value);
-    const B = parseFloat(lngInput.value);
+    const inputA = parseFloat(latInput.value);
+    const inputB = parseFloat(lngInput.value);
 
-    if (isNaN(A) || isNaN(B)) {
-      output.value = "Error: Enter valid numeric values.";
+    if (isNaN(inputA) || isNaN(inputB)) {
+      output.value = "Error: Please enter valid numeric values.";
       return;
     }
 
     const direction = directionSelect.value;
-    const proj = projectionSelect.value;
+    const projection = projectionSelect.value;
 
-    if (direction === "forward" && proj === "3857") {
-      const { x, y } = wgs84ToWebMercator(A, B);
+    // WGS84 → Web Mercator
+    if (direction === "forward" && projection === "3857") {
+      const { x, y } = wgs84ToWebMercator(inputA, inputB);
       output.value =
-        `WGS84 → Web Mercator\n\nX: ${x.toFixed(3)}\nY: ${y.toFixed(3)}`;
+        `WGS84 → Web Mercator\n\n` +
+        `X: ${x.toFixed(3)} m\n` +
+        `Y: ${y.toFixed(3)} m`;
+      return;
     }
 
-    if (direction === "forward" && proj === "utm") {
-      const utm = wgs84ToUTM(A, B);
+    // WGS84 → UTM
+    if (direction === "forward" && projection === "utm") {
+      const utm = wgs84ToUTM(inputA, inputB);
       output.value =
-        `WGS84 → UTM\n\nZone: ${utm.zone}${utm.hemisphere}\n` +
-        `Easting : ${utm.easting.toFixed(3)}\n` +
-        `Northing: ${utm.northing.toFixed(3)}`;
+        `WGS84 → UTM\n\n` +
+        `Zone: ${utm.zone}${utm.hemisphere}\n` +
+        `Easting : ${utm.easting.toFixed(3)} m\n` +
+        `Northing: ${utm.northing.toFixed(3)} m`;
+      return;
     }
 
-    if (direction === "reverse" && proj === "3857") {
-      const { lat, lon } = webMercatorToWgs84(B, A);
+    // Web Mercator → WGS84
+    if (direction === "reverse" && projection === "3857") {
+      const { lat, lon } = webMercatorToWgs84(inputB, inputA);
       output.value =
-        `Web Mercator → WGS84\n\nLat: ${lat.toFixed(6)}\nLon: ${lon.toFixed(6)}`;
+        `Web Mercator → WGS84\n\n` +
+        `Latitude : ${lat.toFixed(6)}\n` +
+        `Longitude: ${lon.toFixed(6)}`;
+      return;
     }
 
-    if (direction === "reverse" && proj === "utm") {
-      const zone = Math.floor((B + 180) / 6) + 1;
-      const hemisphere = A >= 0 ? "N" : "S";
-
-      const { lat, lon } = utmToWgs84(B, A, zone, hemisphere);
+    // UTM reverse (disabled)
+    if (direction === "reverse" && projection === "utm") {
       output.value =
-        `UTM → WGS84\n\nLat: ${lat.toFixed(6)}\nLon: ${lon.toFixed(6)}`;
+        "UTM → WGS84 is disabled in v1.\n\n" +
+        "Reason:\n" +
+        "- UTM conversion requires Zone and Hemisphere.\n" +
+        "- These inputs are not yet provided.\n\n" +
+        "This will be added in a future update.";
     }
   }
 
+  // ---------- Events ----------
   convertBtn.addEventListener("click", convertCoordinates);
 
   clearBtn.addEventListener("click", () => {
@@ -195,24 +161,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   copyBtn.addEventListener("click", () => {
     if (!output.value) return;
-
     navigator.clipboard.writeText(output.value);
     copyBtn.textContent = "Copied!";
-    setTimeout(() => {
-      copyBtn.textContent = "Copy Output";
-    }, 1000);
+    setTimeout(() => (copyBtn.textContent = "Copy Output"), 1000);
   });
 
   downloadBtn.addEventListener("click", () => {
     if (!output.value) return;
 
-    const blob = new Blob([output.value], {
-      type: "text/plain",
-    });
-
+    const blob = new Blob([output.value], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
 
+    const a = document.createElement("a");
     a.href = url;
     a.download = "coordinates.txt";
     document.body.appendChild(a);

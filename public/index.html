@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FS Evo</title>
+
+  <title>FS Evo — Browser-based Utility Tools</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="../assets/logo/fs-evo-logo.png" />
 
   <!-- Base styles -->
   <link rel="stylesheet" href="../styles/base.css" />
@@ -17,34 +21,29 @@
       alt="FS Evo Logo"
       class="site-logo"
     />
+    <h1 class="site-title">FS Evo</h1>
     <p class="tagline">Fast, simple, browser-based utilities</p>
   </header>
 
   <!-- ===== Tools Grid ===== -->
-  <main class="tools-grid">
+  <main class="tools-grid" aria-label="FS Evo tools">
     <a class="tool-card" href="../tools/coordinate/index.html">
       <h2>Coordinate Converter</h2>
-      <p>
-        Convert between WGS84, Web Mercator, and UTM coordinates.
-      </p>
+      <p>Convert between WGS84, Web Mercator, and UTM coordinates.</p>
       <span class="tool-tag">GIS / Survey</span>
     </a>
 
     <a class="tool-card" href="../tools/csv-json/index.html">
       <h2>CSV ↔ JSON Converter</h2>
-      <p>
-        Convert tabular data between CSV and JSON formats.
-      </p>
+      <p>Convert tabular data between CSV and JSON formats.</p>
       <span class="tool-tag">Data</span>
     </a>
 
-    <a class="tool-card disabled" href="#">
+    <div class="tool-card disabled" aria-disabled="true">
       <h2>Image Utility</h2>
-      <p>
-        Resize images and convert formats directly in your browser.
-      </p>
+      <p>Resize images and convert formats directly in your browser.</p>
       <span class="tool-tag">Image</span>
-    </a>
+    </div>
   </main>
 
   <!-- ===== Footer ===== -->

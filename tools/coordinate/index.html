@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Coordinate Converter | FS Evo</title>
+
   <link rel="stylesheet" href="../../styles/base.css" />
 </head>
 
 <body>
+  <!-- ===== Tool Header ===== -->
   <header class="tool-header">
     <a class="back-link" href="../../public/index.html">← Back to FS Evo</a>
     <h1>Coordinate Converter</h1>
@@ -16,60 +19,74 @@
     </p>
   </header>
 
+  <!-- ===== Tool Main ===== -->
   <main>
-    <section>
-      <h2>Input Coordinates</h2>
+    <form id="converterForm" autocomplete="off">
+      <section>
+        <h2>Input Coordinates</h2>
 
-      <label>
-        Conversion Direction
+        <label for="direction">
+          Conversion Direction
+        </label>
         <select id="direction">
           <option value="forward">WGS84 → Web Mercator</option>
           <option value="reverse">Web Mercator → WGS84</option>
         </select>
-      </label>
 
-      <label>
-        Latitude / Y
-        <input type="number" id="lat" step="any" placeholder="Latitude or Y (meters)" />
-      </label>
+        <label for="lat">
+          Latitude / Y
+        </label>
+        <input
+          type="number"
+          id="lat"
+          step="any"
+          placeholder="Latitude or Y (meters)"
+        />
 
-      <label>
-        Longitude / X
-        <input type="number" id="lng" step="any" placeholder="Longitude or X (meters)" />
-      </label>
+        <label for="lng">
+          Longitude / X
+        </label>
+        <input
+          type="number"
+          id="lng"
+          step="any"
+          placeholder="Longitude or X (meters)"
+        />
 
-      <label>
-        Convert to
+        <label for="projection">
+          Convert to
+        </label>
         <select id="projection">
           <option value="3857">Web Mercator (EPSG:3857)</option>
           <option value="utm">UTM (WGS84)</option>
         </select>
-      </label>
 
-      <div class="button-row">
-        <button id="convertBtn">Convert</button>
-        <button id="clearBtn">Clear</button>
-      </div>
-    </section>
+        <div class="tool-actions">
+          <button type="button" id="convertBtn">Convert</button>
+          <button type="button" id="clearBtn">Clear</button>
+        </div>
+      </section>
 
-    <section>
-      <h2>Output</h2>
+      <section>
+        <h2>Output</h2>
 
-      <textarea
-        id="outputData"
-        rows="8"
-        readonly
-        placeholder="Converted coordinates will appear here..."
-      ></textarea>
+        <textarea
+          id="outputData"
+          rows="8"
+          readonly
+          placeholder="Converted coordinates will appear here..."
+        ></textarea>
 
-      <div class="tool-actions">
-        <button id="copyBtn" type="button">Copy Output</button>
-        <button id="downloadBtn" type="button">Download</button>
-      </div>
-    </section>
+        <div class="tool-actions">
+          <button type="button" id="copyBtn">Copy Output</button>
+          <button type="button" id="downloadBtn">Download</button>
+        </div>
+      </section>
+    </form>
   </main>
 
-  <footer>
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
     <p>FS Evo — Coordinate Utility (v1)</p>
   </footer>
 

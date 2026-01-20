@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>CSV ↔ JSON Converter | FS Evo</title>
+
   <link rel="stylesheet" href="../../styles/base.css" />
 </head>
 
 <body>
-  <!-- Header -->
+  <!-- ===== Tool Header ===== -->
   <header class="tool-header">
     <a class="back-link" href="../../public/index.html">← Back to FS Evo</a>
     <h1>CSV ↔ JSON Converter</h1>
@@ -17,62 +19,67 @@
     </p>
   </header>
 
-  <!-- Main -->
+  <!-- ===== Tool Main ===== -->
   <main>
-    <!-- Conversion type -->
-    <section>
-      <h2>Conversion Type</h2>
+    <form id="csvJsonForm" autocomplete="off">
+      <!-- Conversion Type -->
+      <section>
+        <h2>Conversion Type</h2>
 
-      <label>
-        <input type="radio" name="mode" id="csvToJson" checked />
-        CSV → JSON
-      </label>
-      <br />
+        <label for="csvToJson">
+          <input type="radio" name="mode" id="csvToJson" checked />
+          CSV → JSON
+        </label>
 
-      <label>
-        <input type="radio" name="mode" id="jsonToCsv" />
-        JSON → CSV
-      </label>
-    </section>
+        <br />
 
-    <!-- Input -->
-    <section>
-      <h2>Input</h2>
-      <textarea
-        id="inputData"
-        rows="8"
-        placeholder="Paste CSV or JSON here..."
-      ></textarea>
+        <label for="jsonToCsv">
+          <input type="radio" name="mode" id="jsonToCsv" />
+          JSON → CSV
+        </label>
+      </section>
 
-      <div class="tool-actions">
-        <button id="convertBtn">Convert</button>
-        <button id="clearBtn" type="button">Clear</button>
-      </div>
-    </section>
+      <!-- Input -->
+      <section>
+        <h2>Input</h2>
 
-    <!-- Output -->
-    <section>
-      <h2>Output</h2>
-      <textarea
-        id="outputData"
-        rows="8"
-        readonly
-        placeholder="Converted result will appear here..."
-      ></textarea>
+        <textarea
+          id="inputData"
+          rows="8"
+          placeholder="Paste CSV or JSON here..."
+        ></textarea>
 
-      <div class="tool-actions">
-        <button id="copyBtn" type="button">Copy Output</button>
-        <button id="downloadBtn" type="button">Download</button>
-      </div>
-    </section>
+        <div class="tool-actions">
+          <button type="button" id="convertBtn">Convert</button>
+          <button type="button" id="clearBtn">Clear</button>
+        </div>
+      </section>
+
+      <!-- Output -->
+      <section>
+        <h2>Output</h2>
+
+        <textarea
+          id="outputData"
+          rows="8"
+          readonly
+          placeholder="Converted result will appear here..."
+        ></textarea>
+
+        <div class="tool-actions">
+          <button type="button" id="copyBtn">Copy Output</button>
+          <button type="button" id="downloadBtn">Download</button>
+        </div>
+      </section>
+    </form>
   </main>
 
-  <!-- Footer -->
-  <footer>
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
     <p>FS Evo — CSV ↔ JSON Utility (v1)</p>
   </footer>
 
-  <!-- JS -->
+  <!-- ===== JS ===== -->
   <script src="logic.js"></script>
 </body>
 </html>

@@ -1,9 +1,13 @@
 // FS Evo — CSV ↔ JSON Converter
-// Version: v1 (stable)
-// Features: CSV→JSON, JSON→CSV, copy, download
+// Version: v1.1 (stable)
+//
+// Notes:
+// - CSV parsing is basic (comma-separated, no quoted fields)
+// - JSON → CSV removes commas from values to preserve structure
+// - Designed for quick utility use, not spreadsheet parity
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Elements
+  // ---------- Elements ----------
   const input = document.getElementById("inputData");
   const output = document.getElementById("outputData");
 
@@ -15,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const copyBtn = document.getElementById("copyBtn");
   const downloadBtn = document.getElementById("downloadBtn");
 
-  // Safety check
+  // ---------- Safety Check ----------
   if (
     !input ||
     !output ||
@@ -33,11 +37,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------- CSV → JSON ----------
   function csvToJson(csvText) {
     const lines = csvText.trim().split("\n");
-    if (lines.length < 2) return [];
+    if (lines.length < 2) {
+      throw new Error("CSV must include a header row and at least one data row.");
+    }
 
     const headers = lines[0].split(",").map(h => h.trim());
+    const seen = new Set();
 
-    return lines.slice(1).map(line => {
+    headers.forEach(h => {
+      if (!h) {
+        throw new Error("CSV header contains empty column names.");
+      }
+      if (seen.has(h)) {
+        throw new Error(`Duplicate CSV header detected: "${h}"`);
+      }
+      seen.add(h);
+    });
+
+    return lines.slice(1).map((line, rowIndex) => {
       const values = line.split(",");
       const obj = {};
 
@@ -51,10 +68,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---------- JSON → CSV ----------
   function jsonToCsv(jsonText) {
-    const data = JSON.parse(jsonText);
+    let data;
+
+    try {
+      data = JSON.parse(jsonText);
+    } catch (err) {
+      throw new Error("Invalid JSON syntax.");
+    }
 
     if (!Array.isArray(data) || data.length === 0) {
-      return "";
+      throw new Error("JSON must be a non-empty array of objects.");
     }
 
     const headers = Object.keys(data[0]);
@@ -66,7 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Data rows
     data.forEach(item => {
       const values = headers.map(h =>
-        item[h] !== undefined ? String(item[h]).replace(/,/g, "") : ""
+        item[h] !== undefined
+          ? String(item[h]).replace(/,/g, "")
+          : ""
       );
       rows.push(values.join(","));
     });
@@ -77,8 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------- Convert ----------
   function convertData() {
     const value = input.value.trim();
+
     if (!value) {
-      output.value = "";
+      output.value = "Please paste CSV or JSON data to convert.";
       return;
     }
 
@@ -91,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         output.value = csv;
       }
     } catch (err) {
-      output.value = "Error: Invalid input format.";
+      output.value = `Error:\n${err.message}`;
     }
   }
 
