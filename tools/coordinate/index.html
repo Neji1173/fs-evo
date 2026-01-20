@@ -18,18 +18,25 @@
 
   <main>
     <section>
-      <h2>Input (Latitude / Longitude)</h2>
+      <h2>Input Coordinates</h2>
 
       <label>
-        Latitude
-        <input type="number" id="lat" placeholder="e.g. 12.9716" step="any" />
+        Latitude (WGS84)
+        <input type="number" id="lat" step="any" placeholder="e.g. 12.9716" />
+       </label>
+
+      <label>
+        Longitude (WGS84)
+        <input type="number" id="lng" step="any" placeholder="e.g. 77.5946" />
       </label>
 
       <label>
-        Longitude
-        <input type="number" id="lng" placeholder="e.g. 77.5946" step="any" />
+        Convert to
+        <select id="projection">
+          <option value="3857">Web Mercator (EPSG:3857)</option>
+        </select>
       </label>
-
+      
       <div class="button-row">
         <button id="convertBtn">Convert</button>
         <button id="clearBtn">Clear</button>
