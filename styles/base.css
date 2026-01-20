@@ -195,3 +195,13 @@ section {
 .tool-actions button:hover {
   background: #eaeaea;
 }
+
+.tool-tag {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: #333;
+  background: #f0f0f0;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
