@@ -54,7 +54,18 @@
 
     <section>
       <h2>Output</h2>
-      <textarea id="outputData" rows="6" readonly></textarea>
+
+      <textarea
+        id="outputData"
+        rows="8"
+        readonly
+        placeholder="Converted coordinates will appear here..."
+      ></textarea>
+
+      <div class="tool-actions">
+        <button id="copyBtn" type="button">Copy Output</button>
+        <button id="downloadBtn" type="button">Download</button>
+      </div>
     </section>
   </main>
 

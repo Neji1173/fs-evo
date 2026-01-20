@@ -10,13 +10,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const convertBtn = document.getElementById("convertBtn");
   const clearBtn = document.getElementById("clearBtn");
+  const copyBtn = document.getElementById("copyBtn");
+  const downloadBtn = document.getElementById("downloadBtn");
 
   if (
     !latInput ||
     !lngInput ||
     !directionSelect ||
     !projectionSelect ||
-    !output
+    !output ||
+    !copyBtn ||
+    !downloadBtn
   ) {
     console.error("FS Evo: Required elements not found");
     return;
@@ -183,5 +187,34 @@ document.addEventListener("DOMContentLoaded", () => {
     latInput.value = "";
     lngInput.value = "";
     output.value = "";
+  });
+
+  copyBtn.addEventListener("click", () => {
+    if (!output.value) return;
+
+    navigator.clipboard.writeText(output.value);
+    copyBtn.textContent = "Copied!";
+    setTimeout(() => {
+      copyBtn.textContent = "Copy Output";
+    }, 1000);
+  });
+
+  downloadBtn.addEventListener("click", () => {
+    if (!output.value) return;
+
+    const blob = new Blob([output.value], {
+      type: "text/plain",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "coordinates.txt";
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   });
 });
