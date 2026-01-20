@@ -174,3 +174,24 @@ section {
   color: #555;
   margin-top: 0.25rem;
 }
+
+/* ---------- Tool Actions (Buttons) ---------- */
+
+.tool-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tool-actions button {
+  padding: 0.45rem 0.9rem;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+.tool-actions button:hover {
+  background: #eaeaea;
+}
