@@ -21,22 +21,31 @@
       <h2>Input Coordinates</h2>
 
       <label>
-        Latitude (WGS84)
-        <input type="number" id="lat" step="any" placeholder="e.g. 12.9716" />
-       </label>
+        Conversion Direction
+        <select id="direction">
+          <option value="forward">WGS84 → Web Mercator</option>
+          <option value="reverse">Web Mercator → WGS84</option>
+        </select>
+      </label>
 
       <label>
-        Longitude (WGS84)
-        <input type="number" id="lng" step="any" placeholder="e.g. 77.5946" />
+        Latitude / Y
+        <input type="number" id="lat" step="any" placeholder="Latitude or Y (meters)" />
+      </label>
+
+      <label>
+        Longitude / X
+        <input type="number" id="lng" step="any" placeholder="Longitude or X (meters)" />
       </label>
 
       <label>
         Convert to
         <select id="projection">
           <option value="3857">Web Mercator (EPSG:3857)</option>
+          <option value="4326">WGS84 (EPSG:4326)</option>
         </select>
       </label>
-      
+
       <div class="button-row">
         <button id="convertBtn">Convert</button>
         <button id="clearBtn">Clear</button>
